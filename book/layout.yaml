@@ -1,0 +1,18 @@
+# Print layout shared by every language. Sizes are in mm.
+# Language-specific settings (title, author, fonts, labels) live in
+# <lang>/metadata.yaml.
+
+# Trim (cut) size and bleed. The PDF page = trim + 2 × bleed.
+trim-width: 128
+trim-height: 188
+bleed: 5
+
+# Margins measured from the trim (cut) line, not from the file edge.
+margin-top: 22
+margin-bottom: 20
+margin-inner: 18
+margin-outer: 15
+
+# Body font size / line spacing in pt.
+font-size: 9.5
+line-height: 16.5

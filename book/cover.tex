@@ -1,0 +1,190 @@
+% Book cover: back + spine + front in one page, with bleed on every side.
+% Page 1 = outside (back | spine | front), page 2 = inside of the cover
+% (inside front | spine | inside back), for covers printed on both sides.
+% Matches the RedPrinting SoftCover guide:
+%   front 128x188, back 128x188, spine = \spine mm, bleed 5mm each side
+%   -> page = (128 + spine + 128 + 10) x 198 mm
+% The panel size can be overridden like the spine (`\def\trimW{148}
+% \def\trimH{210}` for the A5 edition, see `make cover-a5`).
+%
+% Build with the Makefile: `make cover SPINE=1.36` (`make guides` adds
+% cut/spine/safe-area lines to check placement against the template).
+%
+% The words and fonts come from <lang>/cover-text.tex, chosen with
+% `\def\coverlang{en}` (default ko; the Makefile passes its `lang`).
+%
+% `\def\split{}` (see `make cover-split`) drops the spine and puts the
+% front and back covers on separate pages instead:
+%   page 1 = front, page 2 = back, each (128 + 10) x (188 + 10) mm.
+\providecommand\spine{7.85}
+\providecommand\coverlang{ko}
+
+\documentclass{article}
+\providecommand\trimW{128}   % mm, one panel
+\providecommand\trimH{188}
+\providecommand\bleed{5}  % mm; the reading PDF uses 0 (see `make pdf`)
+\newcommand\safe{8}      % keep text at least this far inside the cut line
+
+\usepackage{xfp}
+\ifdefined\split
+  \edef\pageW{\fpeval{\trimW + 2*\bleed}}
+\else
+  \edef\pageW{\fpeval{2*\trimW + \spine + 2*\bleed}}
+\fi
+\edef\pageH{\fpeval{\trimH + 2*\bleed}}
+% x positions (mm from the left edge of the file)
+\edef\spineL{\fpeval{\bleed + \trimW}}            % back cover | spine
+\edef\spineR{\fpeval{\bleed + \trimW + \spine}}   % spine | front cover
+\edef\frontR{\fpeval{\spineR + \trimW}}           % front cover cut line
+\edef\topY{\fpeval{\bleed + \trimH}}
+
+\usepackage[paperwidth=\pageW mm, paperheight=\pageH mm, margin=0pt]{geometry}
+\usepackage{fontspec}
+% fonts, \booktitle, \bookauthor, \fronttitle, \loop..., \backtext
+\input{\coverlang/cover-text}
+\providecommand\backleading{14.5}  % back-cover line spacing (pt); a language may set it
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta}
+
+% Print colours in CMYK.
+\selectcolormodel{cmyk}
+\definecolor{bg}{cmyk}{0.78,0.25,0,0.10}     % coral blue (the key colour; site/style.css --accent)
+\definecolor{ink}{cmyk}{0,0,0,1}              % pure black (K only)
+\definecolor{ink2}{cmyk}{0,0,0,0.75}
+
+% TrimBox = cut line, BleedBox = whole page (read by print preflight).
+\AddToHook{shipout/background}{\put(0,0){\special{pdf:put @thispage <<
+  /TrimBox [\fpeval{\bleed*72/25.4} \fpeval{\bleed*72/25.4}
+            \fpeval{(\pageW-\bleed)*72/25.4} \fpeval{(\pageH-\bleed)*72/25.4}]
+  /BleedBox [0 0 \fpeval{\pageW*72/25.4} \fpeval{\pageH*72/25.4}] >>}}}
+
+% Background of the inside of the cover (page 2). Use {cmyk}{0,0,0,0} for
+% unprinted white paper.
+\definecolor{insidebg}{cmyk}{0,0,0,0}  % white (no ink); use \colorlet{insidebg}{bg} for coral blue
+
+% Cut / safe-area lines for one panel on its own page (split mode).
+\newcommand\panelguides{%
+  \ifdefined\guides
+    \begin{scope}[line width=0.25pt]
+      \draw[red] (\bleed,\bleed) rectangle (\bleed+\trimW,\topY);
+      \draw[blue, dashed] (\bleed+\safe,\bleed+\safe)
+                          rectangle (\bleed+\trimW-\safe,\topY-\safe);
+    \end{scope}
+  \fi}
+
+% Cut / spine / safe-area lines, drawn only with `make guides`.
+\newcommand\guidelines{%
+  \ifdefined\guides
+    \begin{scope}[line width=0.25pt]
+      \draw[red] (\bleed,\bleed) rectangle (\frontR,\topY);           % cut
+      \draw[red] (\spineL,0) -- (\spineL,\pageH) (\spineR,0) -- (\spineR,\pageH);
+      \draw[blue, dashed] (\bleed+\safe,\bleed+\safe)
+                          rectangle (\spineL-\safe,\topY-\safe);       % safe area
+      \draw[blue, dashed] (\spineR+\safe,\bleed+\safe)
+                          rectangle (\frontR-\safe,\topY-\safe);
+    \end{scope}
+  \fi}
+
+% Panel contents, drawn from the bottom-left corner of the cut line.
+\newcommand\frontpanel{%
+    \node[anchor=north west, align=left, inner sep=0, text=ink,
+          font=\sffamily\bfseries\fontsize{25}{34}\selectfont]
+      at (14, \trimH-24) {\fronttitle};
+
+    % the agent loop (think -> act -> observe), centred across the panel and
+    % in the space between title and author
+    \begin{scope}[shift={(\trimW/2,\trimH/2-29.5)}, line width=0.9pt, draw=ink,
+                  every node/.style={text=ink}]
+      \def\R{26}
+      \foreach \a/\t in {90/\loopthink, -30/\loopact, 210/\loopobserve}
+        \draw (\a:\R) circle (10)
+          node[font=\sffamily\bfseries\fontsize{9}{11}\selectfont] {\t};
+      \foreach \s/\e in {64/-4, -56/-124, 184/116}
+        \draw[-{Stealth[length=2.6mm,width=2mm]}]
+          (\s:\R) arc[start angle=\s, end angle=\e, radius=\R];
+      \node[align=center, font=\sffamily\fontsize{7.5}{9.5}\selectfont]
+        at (0,0) {\loopcenter};
+    \end{scope}
+
+    \node[anchor=south west, inner sep=0, text=ink,
+          font=\sffamily\fontsize{11}{14}\selectfont]
+      at (14, 16) {\bookauthor};
+}
+\newcommand\backpanel{%
+    \node[anchor=north west, text width=\fpeval{\trimW-32}mm, align=justify, inner sep=0,
+          text=ink, font=\fontsize{8.5}{\backleading}\selectfont]
+      at (16, \trimH-28) {\backtext};
+    \node[anchor=south west, inner sep=0, text=ink2,
+          font=\sffamily\fontsize{7.5}{9}\selectfont]
+      at (16, 16) {\booktitle\quad\bookauthor};
+}
+
+\pagestyle{empty}
+\begin{document}
+\ifdefined\split
+% ===== split mode: page 1 = front, page 2 = back, no spine ===============
+\begin{tikzpicture}[remember picture, overlay, x=1mm, y=1mm,
+    shift={(current page.south west)}]
+  \fill[bg] (0,0) rectangle (\pageW,\pageH);
+  \begin{scope}[shift={(\bleed,\bleed)}]
+    \frontpanel
+  \end{scope}
+  \panelguides
+\end{tikzpicture}
+
+\newpage
+\begin{tikzpicture}[remember picture, overlay, x=1mm, y=1mm,
+    shift={(current page.south west)}]
+  \fill[bg] (0,0) rectangle (\pageW,\pageH);
+  \begin{scope}[shift={(\bleed,\bleed)}]
+    \backpanel
+  \end{scope}
+  \panelguides
+\end{tikzpicture}
+\else
+\begin{tikzpicture}[remember picture, overlay, x=1mm, y=1mm,
+    shift={(current page.south west)}]
+
+  % background: fill the whole file, including the 5mm bleed
+  \fill[bg] (0,0) rectangle (\pageW,\pageH);
+
+  % ---- front cover ------------------------------------------------------
+  \begin{scope}[shift={(\spineR,\bleed)}]
+    \frontpanel
+  \end{scope}
+
+  % ---- back cover -------------------------------------------------------
+  \begin{scope}[shift={(\bleed,\bleed)}]
+    \backpanel
+  \end{scope}
+
+  % ---- spine ------------------------------------------------------------
+  % Text only fits on a spine of about 5mm or more.
+  \ifdim\spine pt<5pt\else
+    \node[rotate=-90, text=ink, inner sep=0,
+          font=\sffamily\bfseries\fontsize{\fpeval{min(9,\spine*1.6)}}{10}\selectfont]
+      at ({(\spineL+\spineR)/2}, {\bleed+\trimH/2})
+      {\booktitle\hspace{8mm}\mdseries\bookauthor};
+  \fi
+
+  \guidelines
+\end{tikzpicture}
+
+\newpage
+% ===== page 2: inside of the cover (printed on the back of the same sheet) ==
+% Left = inside front (표지_앞_안), right = inside back (표지_뒤_안).
+% Currently plain background colour; put content in the two scopes if wanted.
+\begin{tikzpicture}[remember picture, overlay, x=1mm, y=1mm,
+    shift={(current page.south west)}]
+  \fill[insidebg] (0,0) rectangle (\pageW,\pageH);
+
+  \begin{scope}[shift={(\bleed,\bleed)}]   % inside front
+  \end{scope}
+  \begin{scope}[shift={(\spineR,\bleed)}]  % inside back
+  \end{scope}
+
+  \guidelines
+\end{tikzpicture}
+\fi
+\end{document}

@@ -1,0 +1,27 @@
+% Korean cover text and fonts, read by book/cover.tex (`make cover`, ...).
+% The layout lives in book/cover.tex; only words and fonts go here.
+\usepackage[hangul]{xetexko}
+\setmainfont{Noto Serif CJK KR}\setmainhangulfont{Noto Serif CJK KR}
+\setsansfont{Noto Sans CJK KR}\setsanshangulfont{Noto Sans CJK KR}
+
+\newcommand\booktitle{에이전틱 코딩 처음 시작하기}
+\newcommand\bookauthor{박근우}
+
+% Front cover: the title as broken into lines, and the agent loop diagram.
+\newcommand\fronttitle{에이전틱 코딩\\처음 시작하기}
+\newcommand\loopthink{생각}
+\newcommand\loopact{행동}
+\newcommand\loopobserve{관찰}
+\newcommand\loopcenter{에이전트\\루프}
+
+% Back cover.
+\newcommand\backtext{%
+        이 소책자는 에이전틱 코딩을 위해 소프트웨어 엔지니어링의 기본기를
+        다시 정리한다. 시스템과 모듈, 복잡성, LLM, 디버깅, 테스트, 버전 관리,
+        배포, 보안까지, 또 한 번의 패러다임 전환이 오지 않는 한 변하지 않을
+        내용을 담았다. 그리고 이 내용을 AI 에이전트 시스템을 처음부터 직접
+        만들어 보면서 익힌다.\par\medskip
+        \textsf{\bfseries 이런 분들에게}\par\smallskip
+        · 엔지니어가 되고 싶은 비엔지니어\par
+        · AI 코딩 에이전트와 함께 소프트웨어를 만드는 사람\par
+        · AI 에이전트가 안에서 어떻게 동작하는지 궁금한 사람}

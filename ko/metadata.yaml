@@ -1,0 +1,29 @@
+# Korean edition: everything that depends on the language.
+# Print layout (sizes, margins, type size) is in book/layout.yaml.
+title: 에이전틱 코딩 처음 시작하기
+author: 박근우
+lang: ko
+
+# Korean typesetting: load xetexko, and set emphasis in the sans-serif
+# (gothic) face, because Korean fonts have no italics.
+hangul: true
+
+main-font: Noto Serif CJK KR
+sans-font: Noto Sans CJK KR
+mono-font: Noto Sans Mono CJK KR
+
+# Labels used by the print book.
+preface-title: 들어가며   # README.md's title is replaced with this
+readme-toc-heading: 목차  # this README section is dropped (the book has its own)
+toc-title: 차례           # heading of the book's table of contents
+
+# Website (`make site`, see site/).
+language-name: 한국어
+site-description: 엔지니어가 되고 싶은 비엔지니어를 위해, 에이전틱 코딩에 필요한 소프트웨어 엔지니어링 기본기를 다시 정리한 소책자.
+site-read: 읽기
+site-pdf: PDF 받기 (A5)
+site-prev: 이전
+site-next: 다음
+site-skip: 본문으로 건너뛰기
+site-tools: 언어와 PDF
+site-pager: 이전 장과 다음 장

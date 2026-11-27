@@ -1,0 +1,28 @@
+% English cover text and fonts, read by book/cover.tex (`make cover lang=en`).
+% The layout lives in book/cover.tex; only words and fonts go here.
+\setmainfont{Noto Serif}
+\setsansfont{Noto Sans}
+\frenchspacing                 % one space after a full stop
+\newcommand\backleading{12.5}  % Latin text needs less line spacing than Korean
+
+\newcommand\booktitle{Agentic Coding From Scratch}
+\newcommand\bookauthor{Keunwoo Park}
+
+% Front cover: the title as broken into lines, and the agent loop diagram.
+\newcommand\fronttitle{Agentic\\Coding\\From Scratch}
+\newcommand\loopthink{Think}
+\newcommand\loopact{Act}
+\newcommand\loopobserve{Observe}
+\newcommand\loopcenter{agent\\loop}
+
+% Back cover.
+\newcommand\backtext{%
+        This booklet re-organizes the basics of software engineering for
+        agentic coding: systems, modules, complexity, LLMs, debugging,
+        testing, version control, deployment, and security. It focuses on
+        the ideas that won't change unless there is another paradigm shift,
+        and teaches them by building an AI agent system from scratch.\par\medskip
+        \textsf{\bfseries Who it's for}\par\smallskip
+        · Non-engineers who want to become engineers\par
+        · Anyone who builds software with AI coding agents\par
+        · Anyone who wants to know how AI agents work inside}
