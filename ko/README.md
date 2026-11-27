@@ -40,8 +40,8 @@ AI 관련 커뮤니티에 들어가 보면 질문하는 사람은 많은데, 대
 
 1. [시스템](chapter1.md)
 2. [모듈](chapter2.md)
-3. [코딩과 에이전틱 코딩](chapter3.md)
-4. [복잡성과 난해함](chapter4.md)
+3. [복잡성과 난해함](chapter3.md)
+4. [코딩과 에이전틱 코딩](chapter4.md)
 5. [LLM](chapter5.md)
 6. [에이전틱 시스템](chapter6.md)
 7. [디버깅](chapter7.md)

@@ -40,8 +40,8 @@ On the other hand, if your goal is to build only what you need for yourself and 
 
 1. [System](chapter1.md)
 2. [Module](chapter2.md)
-3. [Coding and Agentic Coding](chapter3.md)
-4. [Complexity and Complicatedness](chapter4.md)
+3. [Complexity and Complicatedness](chapter3.md)
+4. [Coding and Agentic Coding](chapter4.md)
 5. [LLM](chapter5.md)
 6. [Agentic Systems](chapter6.md)
 7. [Debugging](chapter7.md)

@@ -1,0 +1,36 @@
+% Chapter 2: the news summary report split into five modules, with the data
+% (interfaces) passed between them.
+\input{figures/_preamble}
+\begin{document}\begin{fig}
+\begin{tikzpicture}[
+    mod/.style={draw=ink, line width=0.8pt, fill=lite, rounded corners=1mm,
+                minimum width=30mm, minimum height=7mm, font=\figtext\bfseries, align=center},
+    dat/.style={draw=mid, rounded corners=3mm, minimum width=30mm, minimum height=6mm,
+                font=\figsmall, align=center},
+    note/.style={font=\figsmall, text=mid, align=left, text width=50mm, anchor=west},
+    node distance=3.2mm,
+  ]
+  \node[dat] (in) {\tr{설정 키워드 · 오늘 날짜}{keywords · today's date}};
+  \node[mod, below=of in] (search) {\tr{검색}{Search}};
+  \node[dat, below=of search] (links) {\tr{뉴스 링크들}{news links}};
+  \node[mod, below=of links] (fetch) {\tr{링크 콘텐츠 수집}{Fetch link content}};
+  \node[dat, below=of fetch] (contents) {\tr{링크 콘텐츠들}{link contents}};
+  \node[mod, below=of contents] (sum) {\tr{콘텐츠 요약}{Summarize}};
+  \node[dat, below=of sum] (sums) {\tr{요약된 콘텐츠들}{summaries}};
+  \node[mod, below=of sums] (fmt) {\tr{리포트 포맷터}{Report formatter}};
+  \node[dat, below=of fmt] (rep) {\tr{리포트}{report}};
+  \node[mod, below=of rep] (send) {\tr{리포트 전달}{Deliver report}};
+  \node[dat, below=of send, font=\figsmall\bfseries] (inbox) {\tr{사용자의 메일함}{user's inbox}};
+
+  \foreach \a/\b in {in/search, search/links, links/fetch, fetch/contents,
+                     contents/sum, sum/sums, sums/fmt, fmt/rep,
+                     rep/send, send/inbox}
+    \draw[arr] (\a) -- (\b);
+
+  \node[note] at ([xshift=5mm]search.east) {\tr{키워드와 날짜로 관련 뉴스 링크를 찾는다}{finds news links for the keywords and date}};
+  \node[note] at ([xshift=5mm]fetch.east) {\tr{링크마다 본문을 가져온다}{gets the body of each link}};
+  \node[note] at ([xshift=5mm]sum.east) {\tr{본문마다 짧게 요약한다}{writes a short summary of each body}};
+  \node[note] at ([xshift=5mm]fmt.east) {\tr{요약들을 정해진 형식으로 묶는다}{puts the summaries into a set format}};
+  \node[note] at ([xshift=5mm]send.east) {\tr{리포트를 사용자에게 메일로 보낸다}{emails the report to the user}};
+\end{tikzpicture}
+\end{fig}\end{document}

@@ -1,3 +1,3 @@
-# Chapter 4: Complexity and Complicatedness
+# Chapter 4: Coding and Agentic Coding
 
 *This chapter is being written.*
